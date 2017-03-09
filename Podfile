@@ -7,5 +7,8 @@ target 'Test' do
   pod 'AlamofireImage'
   pod 'SwiftyJSON'
   pod 'SwiftSpinner'
-  pod 'Cache'
+  pod 'ReachabilitySwift'
+  pod 'SwiftSpinner'
+  pod 'DeviceKit', '~> 1.0'
+
 end

@@ -25,6 +25,9 @@
 		CF62611D1E71AB1300DA6351 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF62611C1E71AB1300DA6351 /* CategoryTableViewCell.swift */; };
 		CF62611F1E71CA4700DA6351 /* AppCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF62611E1E71CA4700DA6351 /* AppCollectionViewCell.swift */; };
 		CF6261211E71D29900DA6351 /* DetailAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6261201E71D29900DA6351 /* DetailAppViewController.swift */; };
+		CF6261231E71EF4E00DA6351 /* logo-imaginamos-white.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6261221E71EF4E00DA6351 /* logo-imaginamos-white.png */; };
+		CF6261261E71F11300DA6351 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6261241E71F11300DA6351 /* 1.png */; };
+		CF6261271E71F11300DA6351 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = CF6261251E71F11300DA6351 /* 2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +53,9 @@
 		CF62611C1E71AB1300DA6351 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		CF62611E1E71CA4700DA6351 /* AppCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF6261201E71D29900DA6351 /* DetailAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAppViewController.swift; sourceTree = "<group>"; };
+		CF6261221E71EF4E00DA6351 /* logo-imaginamos-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-imaginamos-white.png"; sourceTree = "<group>"; };
+		CF6261241E71F11300DA6351 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		CF6261251E71F11300DA6351 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,9 @@
 			isa = PBXGroup;
 			children = (
 				06FB9DC11E6FA7F700B34F0B /* defaulIconApp.png */,
+				CF6261241E71F11300DA6351 /* 1.png */,
+				CF6261251E71F11300DA6351 /* 2.png */,
+				CF6261221E71EF4E00DA6351 /* logo-imaginamos-white.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -245,7 +254,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF01CF261E6EFFF5009B59E5 /* LaunchScreen.storyboard in Resources */,
+				CF6261231E71EF4E00DA6351 /* logo-imaginamos-white.png in Resources */,
+				CF6261271E71F11300DA6351 /* 2.png in Resources */,
 				CF01CF231E6EFFF5009B59E5 /* Assets.xcassets in Resources */,
+				CF6261261E71F11300DA6351 /* 1.png in Resources */,
 				CF01CF211E6EFFF5009B59E5 /* Main.storyboard in Resources */,
 				06FB9DC21E6FA7F700B34F0B /* defaulIconApp.png in Resources */,
 			);
@@ -443,6 +455,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 48A7A426FFF9683C8FCA5601 /* Pods-Test.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44AKU39HBC;
@@ -459,6 +472,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B58A49D4B5B68CCD45E21D05 /* Pods-Test.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44AKU39HBC;

@@ -8,31 +8,66 @@
 
 import UIKit
 import AlamofireImage
+import SwiftSpinner
+import DeviceKit
 
-class AppsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CategoriesDelegate {
+class AppsViewController: UIViewController, CategoriesDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var noConection: UILabel!
 
     var listOfApps = [App]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        ServiceApps.sharedInstance.loadApps({ (lisOfApps) in
-            self.listOfApps = lisOfApps
-            self.tableView.reloadData()
-            self.collectionView.reloadData()
-        }) { (error) in
-            
-        }
-        // Do any additional setup after loading the view.
+        self.loadData()
     }
 
+    @IBAction func loadData(){
+        self.noConection.isHidden = true;
+         SwiftSpinner.show("Loading data...")
+        ServiceApps.sharedInstance.loadApps({ (lisOfApps) in
+            DispatchQueue.main.async {
+                self.listOfApps = lisOfApps
+                let device = Device()
+
+                if device.isPhone{
+                    self.tableView.reloadData()
+                } else {
+                    self.collectionView.reloadData()
+                }
+                
+                SwiftSpinner.hide()
+            }
+        }) { (error) in
+            DispatchQueue.main.async {
+                self.noConection.isHidden = false;
+                SwiftSpinner.hide()
+            }
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        if segue.identifier == "segueDetail"{
+            let detailViewController = segue.destination as! DetailAppViewController
+            let device = Device()
+            if device.isPhone{
+                let indexPath = self.tableView.indexPathForSelectedRow
+                let app = self.listOfApps[(indexPath?.row)!]
+                detailViewController.app = app
+            } else {
+                let indexPath = self.collectionView.indexPathsForSelectedItems?[0]
+                let app = self.listOfApps[(indexPath?.row)!]
+                detailViewController.app = app
+            }
+            
+            
+        }
+        
         if segue.identifier == "segueCategories"{
             let navController = segue.destination as! UINavigationController
             let categoriesViewController = navController.topViewController as! CategoriesViewController
@@ -40,8 +75,28 @@ class AppsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
 
-    // MARK: TableView
+    // MARK: CategoriesDelegate
+    
+    func categorySelected(category :AppCategory) {
+        ServiceApps.sharedInstance.loadAppsFromCategories(category.categoryName, { (listOfApps: [App]) in
+            self.listOfApps = listOfApps
+            let device = Device()
+            if device.isPhone{
+                self.tableView.reloadData()
+            } else {
+                self.collectionView.reloadData()
+            }
+        }) { (NSError) in
+            
+        }
+    }
+    
+    // MARK: UICollection
+}
 
+extension AppsViewController: UITableViewDelegate, UITableViewDataSource {
+    // MARK: TableView
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -52,7 +107,7 @@ class AppsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AppCell", for: indexPath as IndexPath) as! AppTableViewCell
-        
+        cell.appImage.image = nil;
         let app = self.listOfApps[indexPath.row]
         cell.appName.text = app.name
         cell.appCategory.text = app.category.categoryName
@@ -64,20 +119,6 @@ class AppsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         return cell
     }
-    
-    // MARK: CategoriesDelegate
-    
-    func categorySelected(category :AppCategory) {
-        ServiceApps.sharedInstance.loadAppsFromCategories(category.categoryName, { (listOfApps: [App]) in
-            self.listOfApps = listOfApps
-            self.tableView.reloadData()
-            self.collectionView.reloadData()
-        }) { (NSError) in
-            
-        }
-    }
-    
-    // MARK: UICollection
 }
 
 extension AppsViewController: UICollectionViewDataSource {

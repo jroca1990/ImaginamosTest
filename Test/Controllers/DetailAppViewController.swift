@@ -7,11 +7,25 @@
 //
 
 import UIKit
+import AlamofireImage
 
 class DetailAppViewController: UIViewController {
+    var app : App!
+    @IBOutlet weak var appName: UILabel!
+    @IBOutlet weak var appImage: UIImageView!
+    @IBOutlet weak var appCategory: UILabel!
+    @IBOutlet weak var appDescription: UITextView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.appName.adjustsFontSizeToFitWidth = true
+        self.appName.text = self.app.name
+        self.appCategory.text = self.app.category.categoryName
+        self.appDescription.text = self.app.descriptionApp
+
+        if self.app.urlImage != "" {
+            self.appImage.af_setImage(withURL: URL(string: app.urlImage)!, placeholderImage: UIImage(named: "defaulIconApp"))
+        }
 
         // Do any additional setup after loading the view.
     }

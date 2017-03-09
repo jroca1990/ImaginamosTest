@@ -9,31 +9,53 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import ReachabilitySwift
 
 class ApiRedditClient: NSObject {
     static let sharedInstance:ApiRedditClient = ApiRedditClient()
     var listOfAppsCategory : Dictionary<String, Any>!
     var listOfApps : Array<App>!
 
-    func appsRequest(_ url: String, success: @escaping (_ lisOfApps: [App]) -> Void, failure:(_ error: NSError) -> Void)  {
-        Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: nil).validate()
-            .responseJSON { response in
-                
-                switch response.result {
-                case .success:
-                    if let value: AnyObject = response.result.value as AnyObject? {
-                        self.saveCache(json: value)
-                        success(self.processData(value: value))
-                    }
-                    
-                case .failure(let error):
-                    if let value: AnyObject = self.loadCache() {
-                       success(self.processData(value: value))
-                    }
-                    break
-                }
-        }
+    func appsRequest(_ url: String, success: @escaping (_ lisOfApps: [App]) -> Void, failure:@escaping (_ error: NSError) -> Void)  {
+        let reachability = Reachability()!
 
+        reachability.whenReachable = { reachability in
+            // this is called on a background thread, but UI updates must
+            // be on the main thread, like this:
+            Alamofire.request(url, method: .get, encoding: JSONEncoding.default, headers: nil).validate()
+                .responseJSON { response in
+                    
+                    switch response.result {
+                    case .success:
+                        if let value: AnyObject = response.result.value as AnyObject? {
+                            self.saveCache(json: value)
+                            success(self.processData(value: value))
+                        }
+                        
+                    case .failure( _):
+                        if let value: AnyObject = self.loadCache() {
+                            success(self.processData(value: value))
+                            let userInfo = [NSLocalizedDescriptionKey: "conexión offline"]
+                            failure(NSError(domain: "", code: 1, userInfo: userInfo))
+                        }
+                        break
+                    }
+            }
+        }
+        
+        reachability.whenUnreachable = { reachability in
+            if let value: AnyObject = self.loadCache() {
+                success(self.processData(value: value))
+                let userInfo = [NSLocalizedDescriptionKey: "conexión offline"]
+                failure(NSError(domain: "", code: 1, userInfo: userInfo))
+            }
+        }
+        
+        do {
+            try reachability.startNotifier()
+        } catch {
+            print("Unable to start notifier")
+        }
     }
     
     func getCategories(success: @escaping (_ lisOfCategories: [String]) -> Void, failure:(_ error: NSError) -> Void)  {
@@ -57,6 +79,7 @@ class ApiRedditClient: NSObject {
                 let app = App()
                 app.name = children["data"]["title"].rawString()!
                 app.urlImage = children["data"]["icon_img"].rawString()!
+                app.descriptionApp = children["data"]["submit_text"].rawString()!
                 
                 let appCategory = AppCategory()
                 if let categoryName = children["data"]["advertiser_category"].string {

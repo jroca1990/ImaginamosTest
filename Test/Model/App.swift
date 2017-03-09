@@ -12,4 +12,6 @@ class App: NSObject {
     var name : String = ""
     var urlImage : String = ""
     var category : AppCategory!
+    var descriptionApp : String = ""
+
 }

@@ -11,11 +11,11 @@ import UIKit
 class ServiceApps: NSObject {
     static let sharedInstance:ServiceApps = ServiceApps()
 
-    func loadApps(_ success: @escaping (_ lisOfApps: [App]) -> Void, failure:(_ error: NSError) -> Void)  {
+    func loadApps(_ success: @escaping (_ lisOfApps: [App]) -> Void, failure:@escaping (_ error: NSError) -> Void)  {
         ApiRedditClient.sharedInstance.appsRequest(Constants.URL_APPI_REDDIT, success: { (lisOfApps) in
                 success(lisOfApps)
         }) { (error) in
-            
+            failure(error);
         }
     }
     
@@ -23,15 +23,15 @@ class ServiceApps: NSObject {
         ApiRedditClient.sharedInstance.getCategories(success: { (lisOfCategories) in
             success(lisOfCategories)
         }) { (error) in
-            
+            failure(error);
         }
     }
     
-    func loadAppsFromCategories(_ category: String, _ success: @escaping (_ lisOfApps: [App]) -> Void, failure:(_ error: NSError) -> Void)  {
+    func loadAppsFromCategories(_ category: String, _ success: @escaping (_ lisOfApps: [App]) -> Void, failure:@escaping (_ error: NSError) -> Void)  {
         ApiRedditClient.sharedInstance.getAppsFromCategory(category, success: { (lisOfApps: [App]) in
             success(lisOfApps)
-        }) { (NSError) in
-            
+        }) { (error) in
+            failure(error);
         }
     }
 }
